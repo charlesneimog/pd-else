@@ -422,7 +422,7 @@ endif
 #########################################################################
 
 # include Makefile.pdlibbuilder from submodule directory 'pd-lib-builder'
-PDLIBBUILDER_DIR=pd-lib-builder/
+PDLIBBUILDER_DIR=Resources/pd-lib-builder/
 include $(PDLIBBUILDER_DIR)/Makefile.pdlibbuilder
 
 # sfont subtargets. These let you build, install, and clean sfont~ without
