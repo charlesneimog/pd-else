@@ -126,5 +126,5 @@ circuit~.class.sources = \
     ./Source/circuit~.c \
     ${empty}
 
-PDLIBBUILDER_DIR=../../../../pd-lib-builder
+PDLIBBUILDER_DIR=../../../../Resources/pd-lib-builder/
 include $(PDLIBBUILDER_DIR)/Makefile.pdlibbuilder
