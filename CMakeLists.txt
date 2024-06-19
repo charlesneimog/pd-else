@@ -1,18 +1,20 @@
 cmake_minimum_required(VERSION 3.25)
 
-set(PDCMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Resources/pd.cmake CACHE PATH "Path to pd.cmake")
+set(PDCMAKE_DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}/Resources/pd.cmake
+    CACHE PATH "Path to pd.cmake")
 include(${PDCMAKE_DIR}/pd.cmake)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Code_source/shared/aubio/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Code_source/shared)
 
-
-
 project(else)
 
-#╭──────────────────────────────────────╮
-#│            GUI INTERFACE             │
-#╰──────────────────────────────────────╯
+set(ENABLE_TILDE_TARGET_WARNING off)
+
+# ╭──────────────────────────────────────╮
+# │            GUI INTERFACE             │
+# ╰──────────────────────────────────────╯
 pd_add_external(knob Code_source/Compiled/control/knob.c)
 pd_add_external(button Code_source/Compiled/control/button.c)
 pd_add_external(pic Code_source/Compiled/control/pic.c)
@@ -21,9 +23,9 @@ pd_add_external(pad Code_source/Compiled/control/pad.c)
 pd_add_external(openfile Code_source/Compiled/control/openfile.c)
 pd_add_external(colors Code_source/Compiled/control/colors.c)
 
-#╭──────────────────────────────────────╮
-#│               CONTROL                │
-#╰──────────────────────────────────────╯
+# ╭──────────────────────────────────────╮
+# │               CONTROL                │
+# ╰──────────────────────────────────────╯
 
 pd_add_external(args Code_source/Compiled/control/args.c)
 pd_add_external(ctl.in Code_source/Compiled/control/ctl.in.c)
@@ -113,4 +115,310 @@ pd_add_external(trunc Code_source/Compiled/control/trunc.c)
 pd_add_external(unmerge Code_source/Compiled/control/unmerge.c)
 pd_add_external(var Code_source/Compiled/control/var.c)
 
+# ╭──────────────────────────────────────╮
+# │                SIGNAL                │
+# ╰──────────────────────────────────────╯
 
+pd_add_external(above~ Code_source/Compiled/audio/above~.c)
+pd_add_external(add~ Code_source/Compiled/audio/add~.c)
+pd_add_external(allpass.2nd~ Code_source/Compiled/audio/allpass.2nd~.c)
+pd_add_external(allpass.rev~ Code_source/Compiled/audio/allpass.rev~.c)
+pd_add_external(bitnormal~ Code_source/Compiled/audio/bitnormal~.c)
+pd_add_external(comb.rev~ Code_source/Compiled/audio/comb.rev~.c)
+pd_add_external(comb.filt~ Code_source/Compiled/audio/comb.filt~.c)
+pd_add_external(adsr~ Code_source/Compiled/audio/adsr~.c)
+pd_add_external(asr~ Code_source/Compiled/audio/asr~.c)
+pd_add_external(bandpass~ Code_source/Compiled/audio/bandpass~.c)
+pd_add_external(bandstop~ Code_source/Compiled/audio/bandstop~.c)
+pd_add_external(bl.imp~ Code_source/Compiled/audio/bl.imp~.c)
+pd_add_external(bl.imp2~ Code_source/Compiled/audio/bl.imp2~.c)
+pd_add_external(bl.saw~ Code_source/Compiled/audio/bl.saw~.c)
+pd_add_external(bl.saw2~ Code_source/Compiled/audio/bl.saw2~.c)
+pd_add_external(bl.square~ Code_source/Compiled/audio/bl.square~.c)
+pd_add_external(bl.tri~ Code_source/Compiled/audio/bl.tri~.c)
+pd_add_external(bl.vsaw~ Code_source/Compiled/audio/bl.vsaw~.c)
+pd_add_external(blocksize~ Code_source/Compiled/audio/blocksize~.c)
+pd_add_external(biquads~ Code_source/Compiled/audio/biquads~.c)
+pd_add_external(car2pol~ Code_source/Compiled/audio/car2pol~.c)
+pd_add_external(ceil~ Code_source/Compiled/audio/ceil~.c)
+pd_add_external(cents2ratio~ Code_source/Compiled/audio/cents2ratio~.c)
+pd_add_external(changed~ Code_source/Compiled/audio/changed~.c)
+pd_add_external(changed2~ Code_source/Compiled/audio/changed2~.c)
+pd_add_external(conv~ Code_source/Compiled/audio/conv~.c)
+pd_add_external(crackle~ Code_source/Compiled/audio/crackle~.c)
+pd_add_external(crossover~ Code_source/Compiled/audio/crossover~.c)
+pd_add_external(cusp~ Code_source/Compiled/audio/cusp~.c)
+pd_add_external(db2lin~ Code_source/Compiled/audio/db2lin~.c)
+pd_add_external(decay~ Code_source/Compiled/audio/decay~.c)
+pd_add_external(decay2~ Code_source/Compiled/audio/decay2~.c)
+pd_add_external(downsample~ Code_source/Compiled/audio/downsample~.c)
+pd_add_external(drive~ Code_source/Compiled/audio/drive~.c)
+pd_add_external(detect~ Code_source/Compiled/audio/detect~.c)
+pd_add_external(envgen~ Code_source/Compiled/audio/envgen~.c)
+pd_add_external(eq~ Code_source/Compiled/audio/eq~.c)
+pd_add_external(fbsine2~ Code_source/Compiled/audio/fbsine2~.c)
+pd_add_external(fdn.rev~ Code_source/Compiled/audio/fdn.rev~.c)
+pd_add_external(floor~ Code_source/Compiled/audio/floor~.c)
+pd_add_external(fold~ Code_source/Compiled/audio/fold~.c)
+pd_add_external(freq.shift~ Code_source/Compiled/audio/freq.shift~.c)
+pd_add_external(gbman~ Code_source/Compiled/audio/gbman~.c)
+pd_add_external(gate2imp~ Code_source/Compiled/audio/gate2imp~.c)
+pd_add_external(get~ Code_source/Compiled/audio/get~.c)
+pd_add_external(giga.rev~ Code_source/Compiled/audio/giga.rev~.c)
+pd_add_external(glide~ Code_source/Compiled/audio/glide~.c)
+pd_add_external(glide2~ Code_source/Compiled/audio/glide2~.c)
+pd_add_external(henon~ Code_source/Compiled/audio/henon~.c)
+pd_add_external(highpass~ Code_source/Compiled/audio/highpass~.c)
+pd_add_external(highshelf~ Code_source/Compiled/audio/highshelf~.c)
+pd_add_external(ikeda~ Code_source/Compiled/audio/ikeda~.c)
+pd_add_external(impseq~ Code_source/Compiled/audio/impseq~.c)
+pd_add_external(trunc~ Code_source/Compiled/audio/trunc~.c)
+pd_add_external(lastvalue~ Code_source/Compiled/audio/lastvalue~.c)
+pd_add_external(latoocarfian~ Code_source/Compiled/audio/latoocarfian~.c)
+pd_add_external(lorenz~ Code_source/Compiled/audio/lorenz~.c)
+pd_add_external(lincong~ Code_source/Compiled/audio/lincong~.c)
+pd_add_external(lin2db~ Code_source/Compiled/audio/lin2db~.c)
+pd_add_external(logistic~ Code_source/Compiled/audio/logistic~.c)
+pd_add_external(loop Code_source/Compiled/control/loop.c)
+pd_add_external(lop2~ Code_source/Compiled/audio/lop2~.c)
+pd_add_external(lowpass~ Code_source/Compiled/audio/lowpass~.c)
+pd_add_external(lowshelf~ Code_source/Compiled/audio/lowshelf~.c)
+pd_add_external(mov.rms~ Code_source/Compiled/audio/mov.rms~.c)
+pd_add_external(mtx~ Code_source/Compiled/audio/mtx~.c)
+pd_add_external(mtx.mc~ Code_source/Compiled/audio/mtx.mc~.c)
+pd_add_external(match~ Code_source/Compiled/audio/match~.c)
+pd_add_external(mov.avg~ Code_source/Compiled/audio/mov.avg~.c)
+pd_add_external(median~ Code_source/Compiled/audio/median~.c)
+pd_add_external(merge~ Code_source/Compiled/audio/merge~.c)
+pd_add_external(nchs~ Code_source/Compiled/audio/nchs~.c)
+pd_add_external(nyquist~ Code_source/Compiled/audio/nyquist~.c)
+pd_add_external(op~ Code_source/Compiled/audio/op~.c)
+pd_add_external(pol2car~ Code_source/Compiled/audio/pol2car~.c)
+pd_add_external(power~ Code_source/Compiled/audio/power~.c)
+pd_add_external(peak~ Code_source/Compiled/audio/peak~.c)
+pd_add_external(phaseseq~ Code_source/Compiled/audio/phaseseq~.c)
+pd_add_external(pulsecount~ Code_source/Compiled/audio/pulsecount~.c)
+pd_add_external(pick~ Code_source/Compiled/audio/pick~.c)
+pd_add_external(pimpmul~ Code_source/Compiled/audio/pimpmul~.c)
+pd_add_external(pulsediv~ Code_source/Compiled/audio/pulsediv~.c)
+pd_add_external(quad~ Code_source/Compiled/audio/quad~.c)
+pd_add_external(quantizer~ Code_source/Compiled/audio/quantizer~.c)
+pd_add_external(ramp~ Code_source/Compiled/audio/ramp~.c)
+pd_add_external(range~ Code_source/Compiled/audio/range~.c)
+pd_add_external(ratio2cents~ Code_source/Compiled/audio/ratio2cents~.c)
+pd_add_external(rescale~ Code_source/Compiled/audio/rescale~.c)
+pd_add_external(rint~ Code_source/Compiled/audio/rint~.c)
+pd_add_external(repeat~ Code_source/Compiled/audio/repeat~.c)
+pd_add_external(resonant~ Code_source/Compiled/audio/resonant~.c)
+pd_add_external(resonant2~ Code_source/Compiled/audio/resonant2~.c)
+pd_add_external(rms~ Code_source/Compiled/audio/rms~.c)
+pd_add_external(sh~ Code_source/Compiled/audio/sh~.c)
+pd_add_external(schmitt~ Code_source/Compiled/audio/schmitt~.c)
+pd_add_external(slice~ Code_source/Compiled/audio/slice~.c)
+pd_add_external(lag~ Code_source/Compiled/audio/lag~.c)
+pd_add_external(lag2~ Code_source/Compiled/audio/lag2~.c)
+pd_add_external(sig2float~ Code_source/Compiled/audio/sig2float~.c)
+pd_add_external(slew~ Code_source/Compiled/audio/slew~.c)
+pd_add_external(slew2~ Code_source/Compiled/audio/slew2~.c)
+pd_add_external(s2f~ Code_source/Compiled/extra_source/Aliases/s2f~.c)
+pd_add_external(sequencer~ Code_source/Compiled/audio/sequencer~.c)
+pd_add_external(select~ Code_source/Compiled/audio/select~.c)
+pd_add_external(sr~ Code_source/Compiled/audio/sr~.c)
+pd_add_external(status~ Code_source/Compiled/audio/status~.c)
+pd_add_external(standard~ Code_source/Compiled/audio/standard~.c)
+pd_add_external(sum~ Code_source/Compiled/audio/sum~.c)
+pd_add_external(sigs~ Code_source/Compiled/audio/sigs~.c)
+pd_add_external(susloop~ Code_source/Compiled/audio/susloop~.c)
+pd_add_external(svfilter~ Code_source/Compiled/audio/svfilter~.c)
+pd_add_external(trig.delay~ Code_source/Compiled/audio/trig.delay~.c)
+pd_add_external(trig.delay2~ Code_source/Compiled/audio/trig.delay2~.c)
+pd_add_external(timed.gate~ Code_source/Compiled/audio/timed.gate~.c)
+pd_add_external(toggleff~ Code_source/Compiled/audio/toggleff~.c)
+pd_add_external(trighold~ Code_source/Compiled/audio/trighold~.c)
+pd_add_external(unmerge~ Code_source/Compiled/audio/unmerge~.c)
+pd_add_external(vu~ Code_source/Compiled/audio/vu~.c)
+pd_add_external(vcf2~ Code_source/Compiled/audio/vcf2~.c)
+pd_add_external(xmod~ Code_source/Compiled/audio/xmod~.c)
+pd_add_external(xmod2~ Code_source/Compiled/audio/xmod2~.c)
+pd_add_external(wrap2 Code_source/Compiled/control/wrap2.c)
+pd_add_external(wrap2~ Code_source/Compiled/audio/wrap2~.c)
+pd_add_external(zerocross~ Code_source/Compiled/audio/zerocross~.c)
+
+# ╭──────────────────────────────────────╮
+# │                AUBIO                 │
+# ╰──────────────────────────────────────╯
+file(GLOB_RECURSE AUBIO_SRC1 "Code_source/shared/aubio/src/*/*.c")
+file(GLOB_RECURSE AUBIO_SRC2 "Code_source/shared/aubio/src/*.c")
+file(GLOB_RECURSE AUBIO_SRC3 "Code_source/Compiled/audio/beat~.c")
+pd_add_external(beat~ "${AUBIO_SRC1};${AUBIO_SRC2};${AUBIO_SRC3}")
+
+# ╭──────────────────────────────────────╮
+# │                MAGIC                 │
+# ╰──────────────────────────────────────╯
+set(MAGIC_CODE Code_source/shared/magic.c)
+
+pd_add_external(gaussian~ "Code_source/Compiled/audio/gaussian~.c;${MAGIC_CODE}")
+pd_add_external(imp~ "Code_source/Compiled/extra_source/Aliases/imp~.c;${MAGIC_CODE}")
+pd_add_external(impulse~ "Code_source/Compiled/audio/impulse~.c;${MAGIC_CODE}")
+pd_add_external(imp2~ "Code_source/Compiled/extra_source/Aliases/imp2~.c;${MAGIC_CODE}")
+pd_add_external(impulse2~ "Code_source/Compiled/audio/impulse2~.c;${MAGIC_CODE}")
+pd_add_external(parabolic~ "Code_source/Compiled/audio/parabolic~.c;${MAGIC_CODE}")
+pd_add_external(pulse~ "Code_source/Compiled/audio/pulse~.c;${MAGIC_CODE}")
+pd_add_external(saw~ "Code_source/Compiled/audio/saw~.c;${MAGIC_CODE}")
+pd_add_external(saw2~ "Code_source/Compiled/audio/saw2~.c;${MAGIC_CODE}")
+pd_add_external(square~ "Code_source/Compiled/audio/square~.c;${MAGIC_CODE}")
+pd_add_external(tri~ "Code_source/Compiled/audio/tri~.c;${MAGIC_CODE}")
+pd_add_external(vsaw~ "Code_source/Compiled/audio/vsaw~.c;${MAGIC_CODE}")
+pd_add_external(pimp~ "Code_source/Compiled/audio/pimp~.c;${MAGIC_CODE}")
+pd_add_external(numbox~ "Code_source/Compiled/audio/numbox~.c;${MAGIC_CODE}")
+
+# ╭──────────────────────────────────────╮
+# │                BUFFER                │
+# ╰──────────────────────────────────────╯
+set(ELSE_BUFFER Code_source/shared/buffer.c)
+
+pd_add_external(fader~ "Code_source/Compiled/audio/fader~.c;${ELSE_BUFFER}")
+pd_add_external(autofade~ "Code_source/Compiled/audio/autofade~.c;${ELSE_BUFFER}")
+pd_add_external(autofade.mc~ "Code_source/Compiled/audio/autofade.mc~.c;${ELSE_BUFFER}")
+pd_add_external(autofade2~ "Code_source/Compiled/audio/autofade2~.c;${ELSE_BUFFER}")
+pd_add_external(autofade2.mc~ "Code_source/Compiled/audio/autofade2.mc~.c;${ELSE_BUFFER}")
+pd_add_external(balance~ "Code_source/Compiled/audio/balance~.c;${ELSE_BUFFER}")
+pd_add_external(pan~ "Code_source/Compiled/audio/pan~.c;${ELSE_BUFFER}")
+pd_add_external(pan.mc~ "Code_source/Compiled/audio/pan.mc~.c;${ELSE_BUFFER}")
+pd_add_external(pan2~ "Code_source/Compiled/audio/pan2~.c;${ELSE_BUFFER}")
+pd_add_external(pan4~ "Code_source/Compiled/audio/pan4~.c;${ELSE_BUFFER}")
+pd_add_external(rotate~ "Code_source/Compiled/audio/rotate~.c;${ELSE_BUFFER}")
+pd_add_external(rotate.mc~ "Code_source/Compiled/audio/rotate.mc~.c;${ELSE_BUFFER}")
+pd_add_external(spread~ "Code_source/Compiled/audio/spread~.c;${ELSE_BUFFER}")
+pd_add_external(spread.mc~ "Code_source/Compiled/audio/spread.mc~.c;${ELSE_BUFFER}")
+pd_add_external(xfade~ "Code_source/Compiled/audio/xfade~.c;${ELSE_BUFFER}")
+pd_add_external(xfade.mc~ "Code_source/Compiled/audio/xfade.mc~.c;${ELSE_BUFFER}")
+pd_add_external(xgate~ "Code_source/Compiled/audio/xgate~.c;${ELSE_BUFFER}")
+pd_add_external(xgate.mc~ "Code_source/Compiled/audio/xgate.mc~.c;${ELSE_BUFFER}")
+pd_add_external(xgate2.mc~ "Code_source/Compiled/audio/xgate2.mc~.c;${ELSE_BUFFER}")
+pd_add_external(xgate2~ "Code_source/Compiled/audio/xgate2~.c;${ELSE_BUFFER}")
+pd_add_external(xselect~ "Code_source/Compiled/audio/xselect~.c;${ELSE_BUFFER}")
+pd_add_external(xselect.mc~ "Code_source/Compiled/audio/xselect.mc~.c;${ELSE_BUFFER}")
+pd_add_external(xselect2~ "Code_source/Compiled/audio/xselect2~.c;${ELSE_BUFFER}")
+pd_add_external(xselect2.mc~ "Code_source/Compiled/audio/xselect2.mc~.c;${ELSE_BUFFER}")
+pd_add_external(sin~ "Code_source/Compiled/audio/sin~.c;${ELSE_BUFFER}")
+pd_add_external(fm~ "Code_source/Compiled/audio/fm~.c;${ELSE_BUFFER}")
+pd_add_external(pm~ "Code_source/Compiled/audio/pm~.c;${ELSE_BUFFER}")
+pd_add_external(pm2~ "Code_source/Compiled/audio/pm2~.c;${ELSE_BUFFER}")
+pd_add_external(pm4~ "Code_source/Compiled/audio/pm4~.c;${ELSE_BUFFER}")
+pd_add_external(pm6~ "Code_source/Compiled/audio/pm6~.c;${ELSE_BUFFER}")
+pd_add_external(shaper~ "Code_source/Compiled/audio/shaper~.c;${ELSE_BUFFER}")
+pd_add_external(tabreader "Code_source/Compiled/control/tabreader.c;${ELSE_BUFFER}")
+pd_add_external(tabreader~ "Code_source/Compiled/audio/tabreader~.c;${ELSE_BUFFER}")
+pd_add_external(function "Code_source/Compiled/control/function.c;${ELSE_BUFFER}")
+pd_add_external(function~ "Code_source/Compiled/audio/function~.c;${ELSE_BUFFER}")
+pd_add_external(tabwriter~ "Code_source/Compiled/audio/tabwriter~.c;${ELSE_BUFFER}")
+pd_add_external(del~ "Code_source/Compiled/audio/del~.c;${ELSE_BUFFER}")
+pd_add_external(fbdelay~ "Code_source/Compiled/audio/fbdelay~.c;${ELSE_BUFFER}")
+pd_add_external(ffdelay~ "Code_source/Compiled/audio/ffdelay~.c;${ELSE_BUFFER}")
+pd_add_external(filterdelay~ "Code_source/Compiled/audio/filterdelay~.c;${ELSE_BUFFER}")
+
+# ╭──────────────────────────────────────╮
+# │               BUFMAGIC               │
+# ╰──────────────────────────────────────╯
+list(APPEND bufmagic ${ELSE_BUFFER})
+list(APPEND bufmagic ${MAGIC_CODE})
+
+pd_add_external(cosine~ "Code_source/Compiled/audio/cosine~.c;${bufmagic}")
+pd_add_external(fbsine~ "Code_source/Compiled/audio/fbsine~.c;${bufmagic}")
+pd_add_external(sine~ "Code_source/Compiled/audio/sine~.c;${bufmagic}")
+pd_add_external(wavetable~ "Code_source/Compiled/audio/wavetable~.c;${bufmagic}")
+pd_add_external(wt~ "Code_source/Compiled/extra_source/Aliases/wt~.c;${bufmagic}")
+pd_add_external(wt2d~ "Code_source/Compiled/audio/wt2d~.c;${bufmagic}")
+pd_add_external(tabplayer~ "Code_source/Compiled/audio/tabplayer~.c;${bufmagic}")
+
+# ╭──────────────────────────────────────╮
+# │               RANDBUF                │
+# ╰──────────────────────────────────────╯
+list(APPEND randbuf "Code_source/shared/random.c")
+list(APPEND randbuf ${MAGIC_CODE})
+
+pd_add_external(gendyn~ "Code_source/Compiled/audio/gendyn~.c;${randbuf}")
+
+# ╭──────────────────────────────────────╮
+# │              RANDMAGIC               │
+# ╰──────────────────────────────────────╯
+list(APPEND randmagic ${MAGIC_CODE})
+list(APPEND randmagic "Code_source/shared/random.c")
+pd_add_external(brown~ "Code_source/Compiled/audio/brown~.c;${randmagic}")
+
+# ╭──────────────────────────────────────╮
+# │                 RAND                 │
+# ╰──────────────────────────────────────╯
+set(rand "Code_source/shared/random.c")
+
+pd_add_external(white~ "Code_source/Compiled/audio/white~.c;${rand}")
+pd_add_external(pink~ "Code_source/Compiled/audio/pink~.c;${rand}")
+pd_add_external(gray~ "Code_source/Compiled/audio/gray~.c;${rand}")
+pd_add_external(pluck~ "Code_source/Compiled/audio/pluck~.c;${rand}")
+pd_add_external(rand.u "Code_source/Compiled/control/rand.u.c;${rand}")
+pd_add_external(rand.hist "Code_source/Compiled/control/rand.hist.c;${rand}")
+pd_add_external(rand.i "Code_source/Compiled/control/rand.i.c;${rand}")
+pd_add_external(rand.i~ "Code_source/Compiled/audio/rand.i~.c;${rand}")
+pd_add_external(rand.f "Code_source/Compiled/control/rand.f.c;${rand}")
+pd_add_external(rand.f~ "Code_source/Compiled/audio/rand.f~.c;${rand}")
+pd_add_external(randpulse~ "Code_source/Compiled/audio/randpulse~.c;${rand}")
+pd_add_external(randpulse2~ "Code_source/Compiled/audio/randpulse2~.c;${rand}")
+pd_add_external(lfnoise~ "Code_source/Compiled/audio/lfnoise~.c;${rand}")
+pd_add_external(rampnoise~ "Code_source/Compiled/audio/rampnoise~.c;${rand}")
+pd_add_external(stepnoise~ "Code_source/Compiled/audio/stepnoise~.c;${rand}")
+pd_add_external(dust~ "Code_source/Compiled/audio/dust~.c;${rand}")
+pd_add_external(dust2~ "Code_source/Compiled/audio/dust2~.c;${rand}")
+pd_add_external(chance "Code_source/Compiled/control/chance.c;${rand}")
+pd_add_external(chance~ "Code_source/Compiled/audio/chance~.c;${rand}")
+pd_add_external(tempo~ "Code_source/Compiled/audio/tempo~.c;${rand}")
+
+# ╭──────────────────────────────────────╮
+# │                 MIDI                 │
+# ╰──────────────────────────────────────╯
+list(APPEND midi_src Code_source/shared/mifi.c Code_source/shared/elsefile.c)
+pd_add_external(midi "Code_source/Compiled/control/midi.c;${midi_src}")
+
+# ╭──────────────────────────────────────╮
+# │                 FILE                 │
+# ╰──────────────────────────────────────╯
+pd_add_external(rec "Code_source/Compiled/control/rec.c;Code_source/shared/elsefile.c")
+
+# ╭──────────────────────────────────────╮
+# │                SMAGIC                │
+# ╰──────────────────────────────────────╯
+set(magic Code_source/shared/magic.c)
+pd_add_external(scope~ "Code_source/Compiled/audio/scope~.c;${magic}")
+
+# ╭──────────────────────────────────────╮
+# │                 UTF                  │
+# ╰──────────────────────────────────────╯
+set(utf Code_source/shared/s_elseutf8.c)
+pd_add_external(note "Code_source/Compiled/control/note.c;${utf}")
+
+# ╭──────────────────────────────────────╮
+# │             EXTRA FILES              │
+# ╰──────────────────────────────────────╯
+file(GLOB Control_Abs "Code_source/Abstractions/control/*.pd")
+file(GLOB Audio_Abs "Code_source/Abstractions/audio/*.pd")
+file(GLOB Extra_Abs "Code_source/Abstractions/extra_abs/*.pd")
+file(GLOB Tcl_Extra "Code_source/Compiled/extra_source/*.tcl")
+file(GLOB Scope3D "Code_source/Compiled/audio/scope3d~.pd_lua")
+file(GLOB Help_Files "Documentation/Help-files/*.pd")
+file(GLOB Extra_Files "Documentation/extra_files/*")
+file(GLOB README "Documentation/README.pdf")
+file(GLOB Lua_Files "Code_source/Compiled/control/lua/*.lua")
+file(GLOB Lua_Files "Code_source/Compiled/control/lua/*.pd_lua")
+
+pd_add_datafile(
+    note
+    "${Control_Abs};${Audio_Abs};${Extra_Abs};${Tcl_Extra};${Scope3D};${Help_Files};${Extra_Files};${README};${Lua_Files}"
+)
+
+# ╭──────────────────────────────────────╮
+# │                PLAITS                │
+# ╰──────────────────────────────────────╯
+file(GLOB_RECURSE PLAITS_SRC "Code_source/Compiled/audio/plaits~/*.cc")
+list(APPEND PLAITS_SRC "Code_source/Compiled/audio/plaits~/plaits~.cpp")
+include_directories("Code_source/Compiled/audio/plaits~/")
+pd_add_external(plaits~ "${PLAITS_SRC}")
