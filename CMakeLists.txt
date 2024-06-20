@@ -118,7 +118,6 @@ pd_add_external(var Code_source/Compiled/control/var.c)
 # ╭──────────────────────────────────────╮
 # │                SIGNAL                │
 # ╰──────────────────────────────────────╯
-
 pd_add_external(above~ Code_source/Compiled/audio/above~.c)
 pd_add_external(add~ Code_source/Compiled/audio/add~.c)
 pd_add_external(allpass.2nd~ Code_source/Compiled/audio/allpass.2nd~.c)
@@ -336,7 +335,7 @@ pd_add_external(tabplayer~ "Code_source/Compiled/audio/tabplayer~.c;${bufmagic}"
 # │               RANDBUF                │
 # ╰──────────────────────────────────────╯
 list(APPEND randbuf "Code_source/shared/random.c")
-list(APPEND randbuf ${MAGIC_CODE})
+list(APPEND randbuf "Code_source/shared/buffer.c")
 
 pd_add_external(gendyn~ "Code_source/Compiled/audio/gendyn~.c;${randbuf}")
 
@@ -410,8 +409,6 @@ pd_add_external(plaits~ "${PLAITS_SRC}")
 list(APPEND SFONT_SRC "Code_source/Compiled/audio/sfont~/sfont~.c")
 list(APPEND SFONT_SRC "Code_source/shared/elsefile.c")
 
-pd_add_external(sfont~ "${SFONT_SRC}" TARGET sfont_tilde)
-
 # ─────────── SFONT LIBRARIES ─────────
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_SHARED_LIBS OFF)
@@ -441,9 +438,11 @@ set(enable-openmp OFF)
 set(enable-alsa OFF)
 set(enable-systemd OFF)
 
-add_subdirectory(Resources/fluidsynth)
+add_subdirectory(Resources/fluidsynth EXCLUDE_FROM_ALL)
+
 set_target_properties(libfluidsynth PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(sfont_tilde libfluidsynth)
+pd_add_external(sfont~ "${SFONT_SRC}" TARGET sfont_tilde)
+target_link_libraries(sfont_tilde PRIVATE libfluidsynth)
 
 # ╭──────────────────────────────────────╮
 # │               CIRCUIT                │
@@ -474,6 +473,7 @@ target_include_directories(
             ${CIRCUIT_ROOT}/Libraries/libsamplerate
             ${CIRCUIT_ROOT}/Libraries/SuiteSparse_config
             ${CIRCUIT_ROOT}/Source)
+target_compile_features(circuit_tilde PRIVATE cxx_std_17)
 
 # ╭──────────────────────────────────────╮
 # │             EXTRA FILES              │
@@ -488,8 +488,22 @@ file(GLOB Extra_Files "Documentation/extra_files/*")
 file(GLOB README "Documentation/README.pdf")
 file(GLOB Lua_Files "Code_source/Compiled/control/lua/*.lua")
 file(GLOB Lua_Files "Code_source/Compiled/control/lua/*.pd_lua")
+set(SF_Fonts "Code_source/Compiled/audio/sfont~/sf")
 
 pd_add_datafile(
     else
-    "${Control_Abs};${Audio_Abs};${Extra_Abs};${Tcl_Extra};${Scope3D};${Help_Files};${Extra_Files};${README};${Lua_Files}"
+    "${Control_Abs};${Audio_Abs};${Extra_Abs};${Tcl_Extra};${Scope3D};${Help_Files};${Extra_Files};${README};${Lua_Files};${SF_Fonts}"
 )
+
+# get_property(all_static_targets GLOBAL PROPERTY "${PROJECT_NAME}_STATIC_LIBRARIES") message("STATIC LIBRARIES:
+# ${all_static_targets}")
+
+# ╭──────────────────────────────────────╮
+# │          Dynamic Libraries           │
+# ╰──────────────────────────────────────╯
+if(WIN32)
+    target_link_libraries(osc.format PRIVATE ws2_32)
+    target_link_libraries(osc.parse PRIVATE ws2_32)
+endif()
+
+add_definitions(-DHAVE_STRUCT_TIMESPEC)
