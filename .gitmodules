@@ -1,3 +1,9 @@
 [submodule "Resources/pd.cmake"]
 	path = Resources/pd.cmake
 	url = https://github.com/pure-data/pd.cmake
+[submodule "Resources/fluidsynth"]
+	path = Resources/fluidsynth
+	url = https://github.com/FluidSynth/fluidsynth.git
+[submodule "Resources/sfizz"]
+	path = Resources/sfizz
+	url = https://github.com/sfztools/sfizz.git

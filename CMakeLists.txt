@@ -397,6 +397,85 @@ set(utf Code_source/shared/s_elseutf8.c)
 pd_add_external(note "Code_source/Compiled/control/note.c;${utf}")
 
 # ╭──────────────────────────────────────╮
+# │                PLAITS                │
+# ╰──────────────────────────────────────╯
+file(GLOB_RECURSE PLAITS_SRC "Code_source/Compiled/audio/plaits~/*.cc")
+list(APPEND PLAITS_SRC "Code_source/Compiled/audio/plaits~/plaits~.cpp")
+include_directories("Code_source/Compiled/audio/plaits~/")
+pd_add_external(plaits~ "${PLAITS_SRC}")
+
+# ╭──────────────────────────────────────╮
+# │                SFONT                 │
+# ╰──────────────────────────────────────╯
+list(APPEND SFONT_SRC "Code_source/Compiled/audio/sfont~/sfont~.c")
+list(APPEND SFONT_SRC "Code_source/shared/elsefile.c")
+
+pd_add_external(sfont~ "${SFONT_SRC}" TARGET sfont_tilde)
+
+# ─────────── SFONT LIBRARIES ─────────
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(BUILD_SHARED_LIBS OFF)
+
+set(enable-aufile OFF)
+set(enable-dbus OFF)
+set(enable-ipv6 OFF)
+set(enable-jack OFF)
+set(enable-ladspa OFF)
+set(enable-libinstpatch OFF)
+set(enable-libsndfile OFF)
+set(enable-midishare OFF)
+set(enable-opensles OFF)
+set(enable-oboe OFF)
+set(enable-network OFF)
+set(enable-oss OFF)
+set(enable-dsound OFF)
+set(enable-wasapi OFF)
+set(enable-waveout OFF)
+set(enable-winmidi OFF)
+set(enable-sdl2 OFF)
+set(enable-pulseaudio OFF)
+set(enable-pipewire OFF)
+set(enable-readline OFF)
+set(enable-threads OFF)
+set(enable-openmp OFF)
+set(enable-alsa OFF)
+set(enable-systemd OFF)
+
+add_subdirectory(Resources/fluidsynth)
+set_target_properties(libfluidsynth PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(sfont_tilde libfluidsynth)
+
+# ╭──────────────────────────────────────╮
+# │               CIRCUIT                │
+# ╰──────────────────────────────────────╯
+set(CIRCUIT_ROOT "Code_source/Compiled/audio/circuit~")
+
+file(GLOB AMD_SRC "${CIRCUIT_ROOT}/Libraries/AMD/*.c")
+file(GLOB BTF_SRC "${CIRCUIT_ROOT}/Libraries/BTF/*.c")
+file(GLOB COLAMD_SRC "${CIRCUIT_ROOT}/Libraries/COLAMD/*.c")
+file(GLOB COLAMD_SRC "${CIRCUIT_ROOT}/Libraries/COLAMD/*.c")
+file(GLOB KLU_SRC "${CIRCUIT_ROOT}/Libraries/KLU/*.c")
+file(GLOB SAMPLERATE_SRC "${CIRCUIT_ROOT}/Libraries/libsamplerate/*.c")
+set(SUITE_SRC "${CIRCUIT_ROOT}/Libraries/SuiteSparse_config/SuiteSparse_config.c")
+set(SIMULATOR_SRC "${CIRCUIT_ROOT}/Source/Simulator.cpp")
+set(CIRCUIT_SRC "${CIRCUIT_ROOT}/Source/circuit~.c")
+
+pd_add_external(
+    circuit~
+    "${CIRCUIT_SRC};${AMD_SRC};${BTF_SRC};${COLAMD_SRC};${KLU_SRC};${SAMPLERATE_SRC};${SUITE_SRC};${SIMULATOR_SRC}"
+    TARGET circuit_tilde)
+
+target_include_directories(
+    circuit_tilde
+    PRIVATE ${CIRCUIT_ROOT}/Libraries
+            ${CIRCUIT_ROOT}/Libraries/AMD
+            ${CIRCUIT_ROOT}/Libraries/BTF
+            ${CIRCUIT_ROOT}/Libraries/KLU
+            ${CIRCUIT_ROOT}/Libraries/libsamplerate
+            ${CIRCUIT_ROOT}/Libraries/SuiteSparse_config
+            ${CIRCUIT_ROOT}/Source)
+
+# ╭──────────────────────────────────────╮
 # │             EXTRA FILES              │
 # ╰──────────────────────────────────────╯
 file(GLOB Control_Abs "Code_source/Abstractions/control/*.pd")
@@ -411,14 +490,6 @@ file(GLOB Lua_Files "Code_source/Compiled/control/lua/*.lua")
 file(GLOB Lua_Files "Code_source/Compiled/control/lua/*.pd_lua")
 
 pd_add_datafile(
-    note
+    else
     "${Control_Abs};${Audio_Abs};${Extra_Abs};${Tcl_Extra};${Scope3D};${Help_Files};${Extra_Files};${README};${Lua_Files}"
 )
-
-# ╭──────────────────────────────────────╮
-# │                PLAITS                │
-# ╰──────────────────────────────────────╯
-file(GLOB_RECURSE PLAITS_SRC "Code_source/Compiled/audio/plaits~/*.cc")
-list(APPEND PLAITS_SRC "Code_source/Compiled/audio/plaits~/plaits~.cpp")
-include_directories("Code_source/Compiled/audio/plaits~/")
-pd_add_external(plaits~ "${PLAITS_SRC}")
