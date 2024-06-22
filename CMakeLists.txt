@@ -406,43 +406,45 @@ pd_add_external(plaits~ "${PLAITS_SRC}")
 # ╭──────────────────────────────────────╮
 # │                SFONT                 │
 # ╰──────────────────────────────────────╯
-list(APPEND SFONT_SRC "Code_source/Compiled/audio/sfont~/sfont~.c")
-list(APPEND SFONT_SRC "Code_source/shared/elsefile.c")
+if(BUILD_SFONT)
 
-# ─────────── SFONT LIBRARIES ─────────
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(BUILD_SHARED_LIBS OFF)
+    list(APPEND SFONT_SRC "Code_source/Compiled/audio/sfont~/sfont~.c")
+    list(APPEND SFONT_SRC "Code_source/shared/elsefile.c")
 
-set(enable-aufile OFF)
-set(enable-dbus OFF)
-set(enable-ipv6 OFF)
-set(enable-jack OFF)
-set(enable-ladspa OFF)
-set(enable-libinstpatch OFF)
-set(enable-libsndfile OFF)
-set(enable-midishare OFF)
-set(enable-opensles OFF)
-set(enable-oboe OFF)
-set(enable-network OFF)
-set(enable-oss OFF)
-set(enable-dsound OFF)
-set(enable-wasapi OFF)
-set(enable-waveout OFF)
-set(enable-winmidi OFF)
-set(enable-sdl2 OFF)
-set(enable-pulseaudio OFF)
-set(enable-pipewire OFF)
-set(enable-readline OFF)
-set(enable-threads OFF)
-set(enable-openmp OFF)
-set(enable-alsa OFF)
-set(enable-systemd OFF)
+    # ─────────── SFONT LIBRARIES ─────────
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    set(BUILD_SHARED_LIBS OFF)
 
-add_subdirectory(Resources/fluidsynth EXCLUDE_FROM_ALL)
+    set(enable-aufile OFF)
+    set(enable-dbus OFF)
+    set(enable-ipv6 OFF)
+    set(enable-jack OFF)
+    set(enable-ladspa OFF)
+    set(enable-libinstpatch OFF)
+    set(enable-libsndfile OFF)
+    set(enable-midishare OFF)
+    set(enable-opensles OFF)
+    set(enable-oboe OFF)
+    set(enable-network OFF)
+    set(enable-oss OFF)
+    set(enable-dsound OFF)
+    set(enable-wasapi OFF)
+    set(enable-waveout OFF)
+    set(enable-winmidi OFF)
+    set(enable-sdl2 OFF)
+    set(enable-pulseaudio OFF)
+    set(enable-pipewire OFF)
+    set(enable-readline OFF)
+    set(enable-threads OFF)
+    set(enable-openmp OFF)
+    set(enable-alsa OFF)
+    set(enable-systemd OFF)
+    add_subdirectory(Resources/fluidsynth EXCLUDE_FROM_ALL)
+    set_target_properties(libfluidsynth PROPERTIES POSITION_INDEPENDENT_CODE ON)
+    pd_add_external(sfont~ "${SFONT_SRC}" TARGET sfont_tilde)
+    target_link_libraries(sfont_tilde PRIVATE libfluidsynth)
 
-set_target_properties(libfluidsynth PROPERTIES POSITION_INDEPENDENT_CODE ON)
-pd_add_external(sfont~ "${SFONT_SRC}" TARGET sfont_tilde)
-target_link_libraries(sfont_tilde PRIVATE libfluidsynth)
+endif()
 
 # ╭──────────────────────────────────────╮
 # │               CIRCUIT                │
@@ -473,6 +475,7 @@ target_include_directories(
             ${CIRCUIT_ROOT}/Libraries/libsamplerate
             ${CIRCUIT_ROOT}/Libraries/SuiteSparse_config
             ${CIRCUIT_ROOT}/Source)
+
 target_compile_features(circuit_tilde PRIVATE cxx_std_17)
 
 # ╭──────────────────────────────────────╮
