@@ -406,6 +406,7 @@ pd_add_external(plaits~ "${PLAITS_SRC}")
 # ╭──────────────────────────────────────╮
 # │                SFONT                 │
 # ╰──────────────────────────────────────╯
+set(BUILD_SFONT ON)
 if(BUILD_SFONT)
 
     list(APPEND SFONT_SRC "Code_source/Compiled/audio/sfont~/sfont~.c")
@@ -481,17 +482,17 @@ target_compile_features(circuit_tilde PRIVATE cxx_std_17)
 # ╭──────────────────────────────────────╮
 # │             EXTRA FILES              │
 # ╰──────────────────────────────────────╯
-file(GLOB Control_Abs "Code_source/Abstractions/control/*.pd")
-file(GLOB Audio_Abs "Code_source/Abstractions/audio/*.pd")
-file(GLOB Extra_Abs "Code_source/Abstractions/extra_abs/*.pd")
-file(GLOB Tcl_Extra "Code_source/Compiled/extra_source/*.tcl")
-file(GLOB Scope3D "Code_source/Compiled/audio/scope3d~.pd_lua")
-file(GLOB Help_Files "Documentation/Help-files/*.pd")
-file(GLOB Extra_Files "Documentation/extra_files/*")
-file(GLOB README "Documentation/README.pdf")
-file(GLOB Lua_Files "Code_source/Compiled/control/lua/*.lua")
-file(GLOB Lua_Files "Code_source/Compiled/control/lua/*.pd_lua")
-set(SF_Fonts "Code_source/Compiled/audio/sfont~/sf")
+file(GLOB Control_Abs "${CMAKE_CURRENT_SOURCE_DIR}/Code_source/Abstractions/control/*.pd")
+file(GLOB Audio_Abs "${CMAKE_CURRENT_SOURCE_DIR}/Code_source/Abstractions/audio/*.pd")
+file(GLOB Extra_Abs "${CMAKE_CURRENT_SOURCE_DIR}/Code_source/Abstractions/extra_abs/*.pd")
+file(GLOB Tcl_Extra "${CMAKE_CURRENT_SOURCE_DIR}/Code_source/Compiled/extra_source/*.tcl")
+file(GLOB Scope3D "${CMAKE_CURRENT_SOURCE_DIR}/Code_source/Compiled/audio/scope3d~.pd_lua")
+file(GLOB Help_Files "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Help-files/*.pd")
+file(GLOB Extra_Files "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/extra_files/*")
+file(GLOB README "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/README.pdf")
+file(GLOB Lua_Files "${CMAKE_CURRENT_SOURCE_DIR}/Code_source/Compiled/control/lua/*.lua")
+file(GLOB Lua_Files "${CMAKE_CURRENT_SOURCE_DIR}/Code_source/Compiled/control/lua/*.pd_lua")
+set(SF_Fonts "${CMAKE_CURRENT_SOURCE_DIR}/Code_source/Compiled/audio/sfont~/sf")
 
 pd_add_datafile(
     else
