@@ -16,12 +16,14 @@ typedef struct _tempo{
     t_float        x_sr;
     t_float        x_gate;
     t_float        x_mul;
+    int            x_run;
     t_float        x_current_mul;
     t_float        x_deviation;
     t_float        x_last_gate;
     t_float        x_last_sync;
     t_float        x_swing;
-    t_float        x_mode;
+    t_int          x_mode;
+    t_int          x_immediate;
     int            x_id;
 }t_tempo;
 
@@ -65,48 +67,60 @@ static t_int *tempo_perform(t_int *w){
         else
             tempo *= deviation;
         double t = (double)tempo;
-        if(x->x_mode == 0)
+        if(x->x_mode == 0) // bpm
             t /= 60.;
-        else if(x->x_mode == 1)
+        else if(x->x_mode == 1) // ms
             t = 1000. / t;
         double hz = (t * (double)x->x_current_mul);
         int period = (int)((1. / hz) * sr);
         if(period < 1)
             period = 1;
-//        post("count = %d", count);
-//        post("period = %d", period);
         double phase_step = hz / sr; // phase_step
         if(phase_step > 1)
             phase_step = 1;
-        if(gate != 0){ // if on
-            if(last_gate == 0){
-                phase = 1;
-                count = period;
+        if(gate || x->x_run){ // if on
+            if(gate){
+                if(!x->x_run){
+                    if(last_gate == 0){
+                        phase = 1;
+                        count = period;
+                    }
+                }
+            }
+            else{
+                if(phase == 1)
+                    count = period;
             }
             if(sync != 0 && last_sync == 0){
                 phase = 1;
                 count = period;
             }
-//            *out++ = phase >= 1.;
-            if(phase >= 1.){
-                phase = phase - 1; // wrapped phase
-                count = period;
-// update deviation/mul
-                /*                x->x_current_mul = x->x_mul;
-                t_float random = (t_float)(random_frand(s1, s2, s3));
-                x->x_deviation = exp(log(ratio) * random);*/
+            if(x->x_immediate){ // sync
+                if(phase >= 1.){
+                    phase = 0;
+                    count = period;
+                }
+                *out++ = count >= period;
+                if(count >= period){
+                    count = 0; // reset
+                    // update deviation/mul
+                    x->x_current_mul = x->x_mul;
+                    t_float random = (t_float)(random_frand(s1, s2, s3));
+                    x->x_deviation = exp(log(ratio) * random);
+                }
+                count++;
             }
-            *out++ = count >= period;
-            if(count >= period){
-                count = 0; // reset
-// update deviation/mul
-                x->x_current_mul = x->x_mul;
-                t_float random = (t_float)(random_frand(s1, s2, s3));
-                x->x_deviation = exp(log(ratio) * random);
-            }
-//            phase += phase_step; // next phase
-            count++;
-        }
+            else{ // adaptive
+                *out++ = phase >= 1.;
+                if(phase >= 1.){
+                    phase = phase - 1; // wrapped phase
+                    // update deviation/mul
+                    x->x_current_mul = x->x_mul;
+                    t_float random = (t_float)(random_frand(s1, s2, s3));
+                    x->x_deviation = exp(log(ratio) * random);
+                }
+                phase += phase_step;
+            }        }
         else
             *out++ = 0; // resets phase too
         last_gate = gate;
@@ -129,6 +143,19 @@ static void tempo_dsp(t_tempo *x, t_signal **sp){
 
 static void tempo_mul(t_tempo *x, t_floatarg f){
     x->x_mul = f <= 0 ? 0.0000000000000001 : f;
+}
+
+static void tempo_run(t_tempo *x, t_floatarg f){
+    int run = (f != 0);
+    if(x->x_run != run){
+        x->x_run = run;
+        if(x->x_run)
+            x->x_phase = 1;
+    }
+}
+
+static void tempo_immediate(t_tempo *x, t_floatarg f){
+    x->x_immediate = (f != 0);
 }
 
 static void tempo_bpm(t_tempo *x, t_symbol *s, int ac, t_atom *av){
@@ -215,6 +242,11 @@ static void *tempo_new(t_symbol *s, int ac, t_atom *av){
                 ac--;
                 av++;
             }
+            else if(curarg == gensym("-sync")){
+                x->x_immediate = 1;
+                ac--;
+                av++;
+            }
             else if(curarg == gensym("-mul")){
                 if((av+1)->a_type == A_FLOAT){
                     mul = atom_getfloatarg(1, ac, av);
@@ -246,7 +278,9 @@ static void *tempo_new(t_symbol *s, int ac, t_atom *av){
     if(mul < 1)
         mul = 1;
     x->x_mul = mul;
+    x->x_run = 0;
     x->x_mode = mode;
+    x->x_immediate = 0;
     x->x_last_sync = 0;
     x->x_last_gate = 0;
     x->x_swing = init_swing;
@@ -275,6 +309,8 @@ void tempo_tilde_setup(void){
     class_addmethod(tempo_class, (t_method)tempo_ms, gensym("ms"), A_GIMME, 0);
     class_addmethod(tempo_class, (t_method)tempo_hz, gensym("hz"), A_GIMME, 0);
     class_addmethod(tempo_class, (t_method)tempo_bpm, gensym("bpm"), A_GIMME, 0);
-    class_addmethod(tempo_class, (t_method)tempo_mul, gensym("mul"), A_DEFFLOAT, 0);
+    class_addmethod(tempo_class, (t_method)tempo_mul, gensym("mul"), A_FLOAT, 0);
+    class_addmethod(tempo_class, (t_method)tempo_run, gensym("run"), A_FLOAT, 0);
+    class_addmethod(tempo_class, (t_method)tempo_immediate, gensym("sync"), A_FLOAT, 0);
     class_addmethod(tempo_class, (t_method)tempo_seed, gensym("seed"), A_GIMME, 0);
 }
