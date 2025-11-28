@@ -214,6 +214,11 @@ target_link_libraries(streamout_tilde PRIVATE ffmpeg)
 target_link_libraries(sfload PRIVATE ffmpeg)
 target_link_libraries(sfinfo PRIVATE ffmpeg)
 
+if(WIN32)
+  target_link_libraries(osc.format PRIVATE ws2_32)
+  target_link_libraries(osc.parse PRIVATE ws2_32)
+endif()
+
 # Add OpenSSL linking for Linux builds
 if(UNIX
    AND NOT APPLE
