@@ -197,7 +197,7 @@ target_link_libraries(else PUBLIC pdlua)
 # ╭──────────────────────────────────────╮
 # │          Ambisonics library          │
 # ╰──────────────────────────────────────╯
-set(FETCHCONTENT_SOURCE_DIR_PDSAF "${CMAKE_CURRENT_SOURCE_DIR}/../pd-saf")
+# set(FETCHCONTENT_SOURCE_DIR_PDSAF "${CMAKE_CURRENT_SOURCE_DIR}/../pd-saf")
 
 FetchContent_Declare(
   pdsaf
