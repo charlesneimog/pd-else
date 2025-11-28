@@ -12,7 +12,7 @@ target_link_libraries(circuit_tilde PRIVATE else_shared)
 
 if(WIN32)
     target_link_options(circuit_tilde PUBLIC -static-libgcc -static-libstdc++ -static)
-    target_link_libraries(pd-circuit_tilde PUBLIC "ws2_32;stdc++")
+    target_link_libraries(circuit_tilde PUBLIC "ws2_32;stdc++")
 endif()
 
 target_include_directories(circuit_tilde PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Libraries)
