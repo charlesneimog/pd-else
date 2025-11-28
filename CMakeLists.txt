@@ -261,7 +261,7 @@ file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Live-Electronics-Tutorial"
      DESTINATION ${PD_OUTPUT_PATH})
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
      DESTINATION ${PD_OUTPUT_PATH}/LICENSE)
-file(COPY "${pd_lua_SOURCE_DIR}/pd.lua" DESTINATION ${PD_OUTPUT_PATH}/)
+# file(COPY "${pd_lua_SOURCE_DIR}/pd.lua" DESTINATION ${PD_OUTPUT_PATH}/)
 file(REMOVE_RECURSE ${PD_OUTPUT_PATH}/audio)
 
 # Log the object count
