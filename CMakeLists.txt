@@ -32,7 +32,7 @@ set(PDCMAKE_FILE ${CMAKE_BINARY_DIR}/pd.cmake)
 if(NOT EXISTS ${PDCMAKE_FILE})
     message(STATUS "Downloading pd.cmake")
     file(
-        DOWNLOAD https://raw.githubusercontent.com/pure-data/pd.cmake/refs/tags/v2.0.10/pd.cmake ${PDCMAKE_FILE}
+        DOWNLOAD https://raw.githubusercontent.com/pure-data/pd.cmake/refs/heads/main/pd.cmake ${PDCMAKE_FILE}
         SHOW_PROGRESS
         STATUS DOWNLOAD_STATUS)
 endif()
