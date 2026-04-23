@@ -186,17 +186,20 @@ if(UNIX
         target_compile_definitions(${target} PRIVATE OPENSSL_NO_KRB5 OPENSSL_NO_ENGINE OPENSSL_API_3_0)
     endforeach()
 endif()
-target_link_libraries(
-    streamout_tilde
-    PUBLIC link
-           opus
-           vorbis
-           vorbisenc)
 
-target_link_libraries(pdlink PUBLIC link)
-target_link_libraries(pdlink_tilde PUBLIC link opus)
-target_include_directories(pdlink_tilde PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/libsamplerate
-                                               ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/opus)
+if(NOT EMSCRIPTEN)
+    target_link_libraries(
+        streamout_tilde
+        PUBLIC link
+               opus
+               vorbis
+               vorbisenc)
+
+    target_link_libraries(pdlink PUBLIC link)
+    target_link_libraries(pdlink_tilde PUBLIC link opus)
+    target_include_directories(pdlink_tilde PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/libsamplerate
+                                                   ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/opus)
+endif()
 
 set(pdf_help "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/README.pdf")
 file(GLOB help_files "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Help-files/*")
