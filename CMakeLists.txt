@@ -37,7 +37,9 @@ if(NOT EXISTS ${PDCMAKE_FILE})
         STATUS DOWNLOAD_STATUS)
 endif()
 
-set(PD_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/else" CACHE STRING "Externals binary path")
+set(PD_OUTPUT_PATH
+    "${CMAKE_CURRENT_BINARY_DIR}/else"
+    CACHE STRING "Externals binary path")
 include(${PDCMAKE_FILE})
 
 # Add static linking on Windows
@@ -77,20 +79,40 @@ if(NOT CMAKE_BUILD_TYPE)
         CACHE STRING "Default build type: Release" FORCE)
 endif()
 
-file(GLOB else_sources ${CMAKE_CURRENT_SOURCE_DIR}/Source/Control/*.c ${CMAKE_CURRENT_SOURCE_DIR}/Source/Audio/*.c ${CMAKE_CURRENT_SOURCE_DIR}/Source/Extra/Aliases/*.c)
+file(
+    GLOB
+    else_sources
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Control/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Audio/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Extra/Aliases/*.c)
 
-file(GLOB aubio_sources ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/aubio/src/**/*.c ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/aubio/src/*.c)
+file(
+    GLOB
+    aubio_sources
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/aubio/src/**/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/aubio/src/*.c)
 
-include_directories(${PD_SOURCES_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/aubio/src)
+include_directories(${PD_SOURCES_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared
+                    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/aubio/src)
 
 foreach(file ${else_sources})
     get_filename_component(name ${file} NAME)
-    string(REGEX REPLACE "\\.[^.]*$" "" name_we ${name})
-    string(REGEX REPLACE "~" "_tilde" target_name ${name_we})
+    string(
+        REGEX
+        REPLACE "\\.[^.]*$"
+                ""
+                name_we
+                ${name})
+    string(
+        REGEX
+        REPLACE "~"
+                "_tilde"
+                target_name
+                ${name_we})
     pd_add_external(${name_we} ${file})
     target_link_libraries(${target_name} PRIVATE else_shared)
 
-# aliases
+    # aliases
     if(${target_name} STREQUAL "sig2float_tilde")
         pd_add_external(s2f~ ${file})
     elseif(${target_name} STREQUAL "car2pol_tilde")
@@ -119,7 +141,7 @@ include(FetchContent)
 FetchContent_Declare(
     pd_lua
     GIT_REPOSITORY https://github.com/EL-LOCUS-SOLUS/pd-lua.git
-    GIT_TAG main)
+    GIT_TAG emscripten)
 FetchContent_MakeAvailable(pd_lua)
 target_link_libraries(else PUBLIC lua)
 
@@ -146,26 +168,69 @@ endif()
 if(UNIX
    AND NOT APPLE
    AND NOT EMSCRIPTEN)
-    foreach(target streamin_tilde streamout_tilde sfload play.file_tilde sfinfo)
-        target_link_libraries(${target} PRIVATE "-Wl,--whole-archive" OpenSSL::SSL OpenSSL::Crypto "-Wl,--no-whole-archive" pthread dl)
+    foreach(
+        target
+        streamin_tilde
+        streamout_tilde
+        sfload
+        play.file_tilde
+        sfinfo)
+        target_link_libraries(
+            ${target}
+            PRIVATE "-Wl,--whole-archive"
+                    OpenSSL::SSL
+                    OpenSSL::Crypto
+                    "-Wl,--no-whole-archive"
+                    pthread
+                    dl)
         target_compile_definitions(${target} PRIVATE OPENSSL_NO_KRB5 OPENSSL_NO_ENGINE OPENSSL_API_3_0)
     endforeach()
 endif()
-target_link_libraries(streamout_tilde PUBLIC link opus vorbis vorbisenc)
+target_link_libraries(
+    streamout_tilde
+    PUBLIC link
+           opus
+           vorbis
+           vorbisenc)
 
 target_link_libraries(pdlink PUBLIC link)
 target_link_libraries(pdlink_tilde PUBLIC link opus)
-target_include_directories(pdlink_tilde PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/libsamplerate ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/opus)
+target_include_directories(pdlink_tilde PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/libsamplerate
+                                               ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/opus)
 
 set(pdf_help "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/README.pdf")
 file(GLOB help_files "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Help-files/*")
-file(GLOB extra_files ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Extra-files/* ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Extra-files/audio/*)
+file(
+    GLOB
+    extra_files
+    ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Extra-files/*
+    ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Extra-files/audio/*)
 
 file(GLOB merda_files "${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Merda/Modules/*")
-file(GLOB tcl_files ${CMAKE_CURRENT_SOURCE_DIR}/Source/Extra/*.tcl ${CMAKE_CURRENT_SOURCE_DIR}/Source/Extra/tkdnd)
-file(GLOB pdlua_files ${CMAKE_CURRENT_SOURCE_DIR}/Source/Audio/*.pd_lua ${CMAKE_CURRENT_SOURCE_DIR}/Source/Control/*.pd_lua)
-file(GLOB abstractions ${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Audio/*.pd ${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Control/*.pd ${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Extra/*)
-file(COPY ${pdf_help} ${extra_files} ${help_files} ${abstractions} ${tcl_files} ${pdlua_files} DESTINATION ${PD_OUTPUT_PATH})
+file(
+    GLOB
+    tcl_files
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Extra/*.tcl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Extra/tkdnd)
+file(
+    GLOB
+    pdlua_files
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Audio/*.pd_lua
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Control/*.pd_lua)
+file(
+    GLOB
+    abstractions
+    ${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Audio/*.pd
+    ${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Control/*.pd
+    ${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Extra/*)
+file(
+    COPY ${pdf_help}
+         ${extra_files}
+         ${help_files}
+         ${abstractions}
+         ${tcl_files}
+         ${pdlua_files}
+    DESTINATION ${PD_OUTPUT_PATH})
 file(COPY ${merda_files} DESTINATION ${PD_OUTPUT_PATH})
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/Source/Audio/sfz~/sfz" DESTINATION ${PD_OUTPUT_PATH})
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Live-Electronics-Tutorial" DESTINATION ${PD_OUTPUT_PATH})
@@ -175,14 +240,31 @@ file(COPY "${pd_lua_SOURCE_DIR}/lua.pd_luajit" DESTINATION ${PD_OUTPUT_PATH}/)
 file(REMOVE_RECURSE ${PD_OUTPUT_PATH}/audio)
 
 # Log the object count
-function(count_files_and_directories dir extension file_count count_dirs)
+function(
+    count_files_and_directories
+    dir
+    extension
+    file_count
+    count_dirs)
     file(GLOB files "${dir}/*")
     foreach(file ${files})
         get_filename_component(file_name "${file}" NAME)
-        if(NOT file_name MATCHES "^\\."
-           AND NOT file_name MATCHES "-help\\.pd$"
-           AND NOT file_name MATCHES ".unit\\.pd$"
-           AND NOT file_name MATCHES "about.MERDA.pd"
+        if(NOT
+           file_name
+           MATCHES
+           "^\\."
+           AND NOT
+               file_name
+               MATCHES
+               "-help\\.pd$"
+           AND NOT
+               file_name
+               MATCHES
+               ".unit\\.pd$"
+           AND NOT
+               file_name
+               MATCHES
+               "about.MERDA.pd"
            AND NOT (IS_DIRECTORY ${file} AND NOT count_dirs)) # Exclude hidden files and help files
             math(EXPR ${file_count} "${${file_count}} + 1")
         endif()
@@ -192,14 +274,40 @@ function(count_files_and_directories dir extension file_count count_dirs)
         PARENT_SCOPE)
 endfunction()
 
-count_files_and_directories("${CMAKE_CURRENT_SOURCE_DIR}/Source/Control" "c" control_c_file_count YES)
-count_files_and_directories("${CMAKE_CURRENT_SOURCE_DIR}/Source/Audio" "c" signal_c_file_count YES)
-count_files_and_directories("${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Control" "pd" control_pd_file_count YES)
-count_files_and_directories("${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Audio" "pd" signal_pd_file_count YES)
-count_files_and_directories("${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Merda/Modules" "pd" modules_pd_file_count NO)
+count_files_and_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/Source/Control"
+    "c"
+    control_c_file_count
+    YES)
+count_files_and_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/Source/Audio"
+    "c"
+    signal_c_file_count
+    YES)
+count_files_and_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Control"
+    "pd"
+    control_pd_file_count
+    YES)
+count_files_and_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Audio"
+    "pd"
+    signal_pd_file_count
+    YES)
+count_files_and_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/Abstractions/Merda/Modules"
+    "pd"
+    modules_pd_file_count
+    NO)
 math(EXPR total_compiled "${control_c_file_count} + ${signal_c_file_count}")
 math(EXPR total_abstractions "${control_pd_file_count} + ${signal_pd_file_count}")
 
-message(STATUS "${total_compiled} coded objects (${signal_c_file_count} signal objects / ${control_c_file_count} control objects)")
-message(STATUS "${total_abstractions} abstractions (${signal_pd_file_count} signal objects / ${control_pd_file_count} control objects)")
+message(
+    STATUS
+        "${total_compiled} coded objects (${signal_c_file_count} signal objects / ${control_c_file_count} control objects)"
+)
+message(
+    STATUS
+        "${total_abstractions} abstractions (${signal_pd_file_count} signal objects / ${control_pd_file_count} control objects)"
+)
 message(STATUS "Merda modules: ${modules_pd_file_count}")
