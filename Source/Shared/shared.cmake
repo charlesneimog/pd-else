@@ -5,7 +5,7 @@ file(GLOB SOURCES
 
 add_subdirectory(Source/Shared/ffmpeg)
 
-add_library(else_shared SHARED ${SOURCES})
+add_library(else_shared SHARED "${SOURCES}")
 
 target_include_directories(else_shared PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared)
