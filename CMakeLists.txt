@@ -32,13 +32,12 @@ set(PDCMAKE_FILE ${CMAKE_BINARY_DIR}/pd.cmake)
 if(NOT EXISTS ${PDCMAKE_FILE})
     message(STATUS "Downloading pd.cmake")
     file(
-        DOWNLOAD https://raw.githubusercontent.com/pure-data/pd.cmake/refs/tags/v2.0.10/pd.cmake ${PDCMAKE_FILE}
+        DOWNLOAD https://raw.githubusercontent.com/pure-data/pd.cmake/refs/tags/v2.0.19/pd.cmake ${PDCMAKE_FILE}
         SHOW_PROGRESS
         STATUS DOWNLOAD_STATUS)
 endif()
 
 set(PD_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/else" CACHE STRING "Externals binary path")
-include(${PDCMAKE_FILE})
 
 # Add static linking on Windows
 if(WIN32)
@@ -69,6 +68,7 @@ set(CMAKE_OSX_ARCHITECTURES
 project(ELSE LANGUAGES C CXX)
 
 # include(${CMAKE_CURRENT_SOURCE_DIR}/pd.cmake)
+include(${PDCMAKE_FILE})
 include(${CMAKE_CURRENT_SOURCE_DIR}/Source/Shared/shared.cmake)
 
 if(NOT CMAKE_BUILD_TYPE)

@@ -43,7 +43,7 @@ if(PD_FLOATSIZE64)
   target_compile_definitions(else_shared PRIVATE PD_FLOATSIZE=64)
 endif()
 
-target_link_libraries(else_shared PUBLIC ffmpeg)
+target_link_libraries(else_shared PUBLIC FFmpeg::required)
 
 function(message)
   if(NOT MESSAGE_QUIET)

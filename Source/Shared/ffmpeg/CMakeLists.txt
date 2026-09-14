@@ -1,50 +1,27 @@
-# External directories
-set(FFMPEG_OUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/ffmpeg-7.0.1")
+include(FetchContent)
 
-set(FFMPEG_LIBS
-    "${FFMPEG_OUT_DIR}/libavformat/libavformat.a"
-    "${FFMPEG_OUT_DIR}/libavcodec/libavcodec.a"
-    "${FFMPEG_OUT_DIR}/libavutil/libavutil.a"
-    "${FFMPEG_OUT_DIR}/libswresample/libswresample.a"
-)
+set(FFMPEG_DISABLE_CMAKE_WARNINGS
+    ON
+    CACHE BOOL "" FORCE)
+set(FFMPEG_LICENSE
+    LGPLV2_1
+    CACHE STRING "" FORCE)
 
-message(STATUS "Configuring ffmpeg")
-file(MAKE_DIRECTORY ${FFMPEG_OUT_DIR})
-string(REGEX REPLACE "^([A-Za-z]):" "/\\1" FFMPEG_TAR_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg-7.0.1.tar.bz2")
-execute_process(
-    COMMAND tar xjf ${FFMPEG_TAR_PATH} -C ${CMAKE_CURRENT_BINARY_DIR}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-file(REMOVE ${FFMPEG_OUT_DIR}/VERSION) # Causes problems, because there is some header somewhere named just <version>
+FetchContent_Declare(
+    ffmpeg
+    GIT_REPOSITORY https://github.com/Pawday/ffmpeg-cmake.git
+    GIT_TAG dea60f9dbe2f0052f4f9a6685016da9bc748e85a)
 
-add_custom_command(
-    OUTPUT ${FFMPEG_LIBS}
-    COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/build_ffmpeg.sh ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_C_COMPILER_LAUNCHER}"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Building FFmpeg libraries..."
-    VERBATIM
-)
+FetchContent_MakeAvailable(ffmpeg)
 
-# Define the custom target that depends on the FFmpeg build
-add_custom_target(
-    ffmpeg_deps
-    ALL
-    DEPENDS ${FFMPEG_LIBS}
-)
-
-add_library(ffmpeg INTERFACE)
-target_link_libraries(ffmpeg INTERFACE ${FFMPEG_LIBS} z)
-target_include_directories(ffmpeg INTERFACE ${FFMPEG_OUT_DIR})
-add_dependencies(ffmpeg ffmpeg_deps)
-
-if(WIN32)
-    target_link_libraries(ffmpeg INTERFACE bcrypt ws2_32 secur32)
-    target_link_libraries(ffmpeg INTERFACE -Wl,-Bstatic -lwinpthread -lz -Wl,-Bdynamic)
-endif()
-
-# Clean up
-add_custom_target(clean_ffmpeg
-    COMMAND rm -rf ${FFMPEG_DIR}
-    COMMAND rm -f *.d_*
-    COMMAND rm -f *.pd_*
-)
+add_library(ffmpeg_required INTERFACE)
+add_library(FFmpeg::required ALIAS ffmpeg_required)
+target_link_libraries(
+    ffmpeg_required
+    INTERFACE ffmpeg.avcodec.static_pic
+              ffmpeg.swscale.static_pic
+              ffmpeg.avutil.static_pic
+              ffmpeg.avcodec.headers
+              ffmpeg.swscale.headers
+              ffmpeg.avutil.headers
+              ${CMAKE_DL_LIBS})
